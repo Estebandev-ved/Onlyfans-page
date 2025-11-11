@@ -1,0 +1,531 @@
+/* 🌊 EASY SOLUTIONS - BLUE PETROL THEME */
+/* Fuente moderna y limpia */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* 🎨 PALETA */
+:root {
+  --color-primario: #122d43; /* Azul petróleo */
+  --color-primario-hover: #1e4665;
+  --color-texto: #333;
+  --color-blanco: #ffffff;
+  --color-gris: #f7f7f7;
+  --color-borde: #e5e5e5;
+  --sombra-suave: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* 🔄 RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--color-blanco);
+  color: var(--color-texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🌐 NAVBAR */
+nav {
+  background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-blanco);
+  box-shadow: var(--sombra-suave);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo img {
+  height: 45px;
+  width: auto;
+  display: block;
+}
+
+/* 1. Contenedor de enlaces (como estaba en tu original) */
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 2. Estilo base para TODOS los enlaces en el nav-container */
+.nav-container a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  margin-left: 25px; /* Usamos margin-left para espaciar desde el 'Inicio' */
+  font-weight: 500;
+  transition: opacity 0.3s;
+  display: flex; /* Para alinear los iconos */
+  align-items: center;
+  gap: 6px; /* Espacio entre icono y texto */
+  white-space: nowrap; /* Evita que el texto se parta */
+}
+
+.nav-container a:hover {
+  opacity: 0.8;
+}
+
+/* 3. Estilos especiales para los botones de Admin y Logout (los amarillos) */
+.nav-container .nav-link-admin,
+.nav-container .nav-link-logout {
+    color: #ffc107 !important; /* Amarillo */
+    font-weight: 600;
+}
+
+/* 🧾 PANEL GENERAL */
+.panel {
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  padding: 30px;
+  margin: 40px auto;
+  width: 90%;
+  box-shadow: var(--sombra-suave);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-borde);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.panel-header h1 {
+  color: var(--color-primario);
+  font-size: 1.6em;
+}
+
+/* 🧭 BOTONES */
+.btn,
+button {
+  background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(18, 45, 67, 0.2);
+}
+
+.btn:hover,
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(18, 45, 67, 0.3);
+}
+
+/* 🔹 Botón secundario (cancelar) */
+.btn-cancelar {
+  background: var(--color-gris);
+  color: var(--color-primario);
+  border: 1px solid var(--color-borde);
+}
+
+.btn-cancelar:hover {
+  background: #eaeaea;
+  transform: translateY(-1px);
+}
+
+/* 🧾 TABLAS */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-blanco);
+  box-shadow: var(--sombra-suave);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla th,
+.tabla td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tabla th {
+  background: var(--color-gris);
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+.tabla tr:hover {
+  background-color: #f1f8ff;
+  transition: 0.3s;
+}
+
+/* 🧾 CARDS */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  margin-top: 30px;
+}
+
+.card {
+  background: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+  height: 200px;
+  box-shadow: var(--sombra-suave);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(18, 45, 67, 0.15);
+}
+
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--color-primario);
+}
+
+.card p {
+  flex-grow: 1;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+/* Centrar el botón */
+.card .btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ⚙️ ANIMACIONES */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🧾 FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  color: #777;
+  font-size: 0.9em;
+  border-top: 1px solid var(--color-borde);
+  background: #fafafa;
+}
+
+/* 📰 SECCIÓN DE NOTICIAS (Swiper) */
+/* === Sección Noticias === */
+.noticias {
+  width: 100%;
+  max-width: 2000px;
+  margin: 40px auto;
+  margin-top: 50px;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #f8fbff;
+  border-radius: 50px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.noticias h2 {
+  text-align: center;
+  color: #0d3559;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+/* === Swiper ajustes === */
+.noticiasSwiper {
+  width: 100%;
+  height: auto;
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.noticia-slide img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* === Texto de cada noticia === */
+.noticia-texto {
+  background: #fff;
+  border-radius: 15px;
+  margin-top: 10px;
+  padding: 15px 20px;
+  text-align: center;
+}
+
+.noticia-texto h3 {
+  color: #0d3559;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.noticia-texto p {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.btn-noticia {
+  background-color: #f7dba6;
+  color: #000;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.btn-noticia:hover {
+  background-color: #ffcc80;
+}
+
+/* === Flechas de navegación === */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #0d3559;
+}
+
+/* === Paginación (los puntos) === */
+.swiper-pagination-bullet {
+  background: #0d3559;
+}
+
+/* 📝 ESTILOS DE FORMULARIO Y VALIDACIÓN */
+
+/* Contenedor general de un campo de formulario (si usas divs) */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Estilo base para inputs y textareas */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primario-hover);
+    box-shadow: 0 0 0 3px rgba(18, 45, 67, 0.1); /* Sombra azul tenue */
+}
+
+/* ESTILOS PARA VALIDACIÓN CON ERROR */
+
+/* Resaltar el input/select con un borde rojo */
+.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+}
+
+/* Estilo para el mensaje de error debajo del campo */
+.error-feedback {
+    color: #dc3545; /* Rojo */
+    font-size: 0.85em;
+    margin-top: 5px;
+    display: block; /* Asegura que ocupe su propia línea */
+    font-weight: 500;
+}
+
+/* 🔔 NOTIFICACIONES TOAST (PARA FEEDBACK AL GUARDAR/ELIMINAR) */
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000; /* Asegura que esté por encima de todo */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: var(--color-blanco);
+    font-weight: 600;
+    box-shadow: var(--sombra-suave);
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Variantes de color para los toasts */
+.toast-success {
+    background: linear-gradient(90deg, #28a745, #218838); /* Verde */
+}
+
+.toast-warning {
+    background: linear-gradient(90deg, #ffc107, #e0a800); /* Naranja/Amarillo */
+    color: var(--color-texto);
+}
+
+.toast-error {
+    background: linear-gradient(90deg, #dc3545, #c82333); /* Rojo */
+}
+
+/* Contenedor principal de los planes */
+/* 🌊 ===============================
+   ESTILOS PARA TABLA DE PRECIOS (TU DIBUJO)
+   (Añadir al final de style.css)
+   =============================== */
+
+/* Contenedor principal de las 3 tarjetas */
+.pricing-container {
+    display: grid;
+    /* En pantallas grandes (desktop), 3 columnas */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+    margin-top: 30px;
+    align-items: center; /* Alinea las tarjetas */
+}
+
+/* Tarjeta individual */
+.pricing-card {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: 15px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    transition: all 0.3s ease;
+    border-top: 5px solid var(--color-borde); /* Borde superior por defecto */
+}
+
+/* Encabezado (Icono y Título) */
+.pricing-header {
+    text-align: center;
+    color: var(--color-primario);
+    margin-bottom: 25px;
+}
+.pricing-header i {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+.pricing-header h3 {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+/* Lista de Características */
+.pricing-features {
+    flex-grow: 1; /* Empuja el botón hacia abajo */
+    margin-bottom: 25px;
+}
+.pricing-features ul {
+    list-style: none;
+    padding: 0;
+}
+.pricing-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    margin-bottom: 12px;
+    font-size: 1.05em;
+}
+.pricing-features li i { /* Icono de Check */
+    color: var(--color-primario);
+    width: 20px;
+    height: 20px;
+}
+
+/* Pie de la tarjeta (Botón) */
+.pricing-footer .btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 1.1em;
+}
+
+/* ============================================
+  LA MAGIA (COMO EN TU DIBUJO): Destacar la del medio
+  ============================================
+*/
+.pricing-card:nth-child(2) {
+    transform: scale(1.05); /* La hace un 5% más grande */
+    border-top: 5px solid #ffc107; /* Borde superior amarillo (destacado) */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12); /* Sombra más fuerte */
+}
+
+/* En pantallas pequeñas (móviles), hacemos que se apilen 
+  una encima de la otra (1 columna) 
+*/
+@media (max-width: 992px) {
+    .pricing-container {
+        grid-template-columns: 1fr; /* 1 columna */
+    }
+    
+    /* En móvil, quitamos el efecto de zoom a la del medio */
+    .pricing-card:nth-child(2) {
+        transform: scale(1); 
+    }
+}
+
+/* Añadir al final de style.css */
+main {
+    padding-top: 15px; /* Pequeño espacio entre el navbar y el contenido */
+}
+/* Asegúrate que el .panel (que envuelve los módulos) también tenga un margen superior si no está dentro del main con padding */

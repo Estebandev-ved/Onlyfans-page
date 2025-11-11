@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to Sophia Chen - CreatorHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1a1a;
+            --deep-black: #0d0d0d;
+            --accent-coral: #ff6b6b;
+            --soft-rose: #ff8e8e;
+            --champagne-gold: #ffd93d;
+            --warm-gray: #f5f5f5;
+            --soft-white: #fafafa;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--deep-black) 100%);
+            color: var(--soft-white);
+            overflow-x: hidden;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-coral), var(--soft-rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--soft-rose));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-coral);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+        
+        .payment-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .payment-card.selected {
+            border-color: var(--accent-coral);
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+        }
+        
+        .subscribe-btn {
+            background: linear-gradient(135deg, var(--accent-coral), var(--soft-rose));
+            transition: all 0.3s ease;
+        }
+        
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .subscribe-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-coral), var(--soft-rose));
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .step {
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            opacity: 1;
+        }
+        
+        .step.completed {
+            opacity: 1;
+            color: var(--accent-coral);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .success-animation {
+            animation: successPulse 2s ease-in-out;
+        }
+        
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold gradient-text" style="font-family: 'Playfair Display', serif;">CreatorHub</a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-300 hover:text-white">Discover</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">Creators</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">Categories</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Progress Indicator -->
+    <div class="pt-16 pb-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8 reveal">
+                <div class="flex items-center space-x-4">
+                    <div class="step active" id="step1">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-sm font-bold">1</div>
+                    </div>
+                    <div class="text-sm">Subscription Details</div>
+                </div>
+                
+                <div class="flex-1 mx-4">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 33.33%"></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="step" id="step2">
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">2</div>
+                    </div>
+                    <div class="text-sm">Payment Info</div>
+                </div>
+                
+                <div class="flex-1 mx-4">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="step" id="step3">
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">3</div>
+                    </div>
+                    <div class="text-sm">Confirmation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <!-- Step 1: Subscription Details -->
+        <div id="step1Content" class="reveal active">
+            <div class="glass-card rounded-2xl p-8 mb-8">
+                <div class="flex items-center mb-6">
+                    <img src="resources/creator-1.jpg" alt="Sophia Chen" class="w-16 h-16 rounded-full object-cover mr-4">
+                    <div>
+                        <h2 class="text-2xl font-bold">Subscribe to Sophia Chen</h2>
+                        <p class="text-gray-400">Premium Tier - $19.99/month</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-6">
+                    <h3 class="text-lg font-bold mb-4">What you'll get:</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Access to all digital art posts
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Monthly art tutorials
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Behind-the-scenes content
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Weekly live streams
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Direct messaging access
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Exclusive PSD files
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Subscription Options -->
+            <div class="glass-card rounded-2xl p-8 mb-8">
+                <h3 class="text-lg font-bold mb-6">Choose your subscription period:</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="payment-card glass-card rounded-xl p-4 border-2 border-transparent selected" data-period="monthly">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold mb-1">$19.99</div>
+                            <div class="text-gray-400 text-sm mb-2">per month</div>
+                            <div class="text-xs text-gray-500">Billed monthly</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card glass-card rounded-xl p-4 border-2 border-transparent" data-period="quarterly">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold mb-1">$17.99</div>
+                            <div class="text-gray-400 text-sm mb-2">per month</div>
+                            <div class="text-xs text-green-400">Save 10% - Billed quarterly</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card glass-card rounded-xl p-4 border-2 border-transparent" data-period="yearly">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold mb-1">$15.99</div>
+                            <div class="text-gray-400 text-sm mb-2">per month</div>
+                            <div class="text-xs text-green-400">Save 20% - Billed yearly</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex items-center">
+                    <input type="checkbox" id="autoRenew" class="mr-3 w-4 h-4" checked>
+                    <label for="autoRenew" class="text-sm text-gray-300">
+                        Auto-renew subscription (you can cancel anytime)
+                    </label>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="subscribe-btn px-8 py-4 rounded-full text-lg font-semibold text-white" id="continueToPayment">
+                    Continue to Payment
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Payment Information -->
+        <div id="step2Content" class="reveal" style="display: none;">
+            <div class="glass-card rounded-2xl p-8 mb-8">
+                <h2 class="text-2xl font-bold mb-6">Payment Information</h2>
+                
+                <form id="paymentForm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">First Name</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="John" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Last Name</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="Doe" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Email Address</label>
+                        <input type="email" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="john@example.com" required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Card Number</label>
+                        <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Expiry Date</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">CVV</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="123" maxlength="4" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Billing Address</label>
+                        <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="123 Main Street" required>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">City</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="New York" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">ZIP Code</label>
+                            <input type="text" class="form-input w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none" placeholder="10001" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="flex justify-between">
+                <button class="glass-card px-8 py-4 rounded-full text-lg font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-300" id="backToDetails">
+                    Back to Details
+                </button>
+                <button class="subscribe-btn px-8 py-4 rounded-full text-lg font-semibold text-white" id="completePayment">
+                    Complete Payment
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div id="step3Content" class="reveal" style="display: none;">
+            <div class="glass-card rounded-2xl p-8 mb-8 text-center success-animation">
+                <div class="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                
+                <h2 class="text-3xl font-bold mb-4" style="font-family: 'Playfair Display', serif;">
+                    Subscription <span class="gradient-text">Successful</span>!
+                </h2>
+                
+                <p class="text-xl text-gray-300 mb-8">
+                    Welcome to Sophia Chen's premium community! You now have access to all exclusive content.
+                </p>
+                
+                <div class="glass-card rounded-xl p-6 mb-8 text-left">
+                    <h3 class="font-bold mb-4">Subscription Details:</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Creator:</span>
+                            <span>Sophia Chen</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Plan:</span>
+                            <span>Premium Monthly</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Price:</span>
+                            <span>$19.99/month</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Next billing:</span>
+                            <span id="nextBilling">December 11, 2024</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Transaction ID:</span>
+                            <span>#CH123456789</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="subscribe-btn px-8 py-4 rounded-full text-lg font-semibold text-white" onclick="window.location.href='creator-profile.html'">
+                        View Creator Profile
+                    </button>
+                    <button class="glass-card px-8 py-4 rounded-full text-lg font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-300" onclick="window.location.href='index.html'">
+                        Discover More Creators
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-50 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4" style="font-family: 'Playfair Display', serif;">CreatorHub</h3>
+                <p class="text-gray-400 mb-8">Empowering creators, connecting communities</p>
+                <div class="flex justify-center space-x-8 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">About</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Support</a>
+                </div>
+                <p class="text-gray-500 text-sm">© 2024 CreatorHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

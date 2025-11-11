@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorHub - Premium Content Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1a1a;
+            --deep-black: #0d0d0d;
+            --accent-coral: #ff6b6b;
+            --soft-rose: #ff8e8e;
+            --champagne-gold: #ffd93d;
+            --warm-gray: #f5f5f5;
+            --soft-white: #fafafa;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--deep-black) 100%);
+            color: var(--soft-white);
+            overflow-x: hidden;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 141, 142, 0.1) 50%, rgba(255, 217, 61, 0.1) 100%);
+            position: relative;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/hero-main.jpg') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-coral), var(--soft-rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .creator-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .creator-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.2);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--soft-rose));
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-coral);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+        
+        .category-btn {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background: linear-gradient(135deg, var(--accent-coral), var(--soft-rose));
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+        
+        .subscribe-btn {
+            background: linear-gradient(135deg, var(--accent-coral), var(--soft-rose));
+            transition: all 0.3s ease;
+        }
+        
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .stats-counter {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .marquee {
+            animation: marquee 30s linear infinite;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold gradient-text" style="font-family: 'Playfair Display', serif;">CreatorHub</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">Discover</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">Creators</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">Categories</a>
+                    <a href="#" class="nav-link text-gray-300 hover:text-white">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search creators..." 
+                               class="search-input px-4 py-2 rounded-full text-sm text-white placeholder-gray-400 w-64 focus:outline-none">
+                        <div class="absolute right-3 top-2.5 text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <button class="bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center relative pt-16">
+        <div class="floating-particles" id="particles-container"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="reveal">
+                <h1 class="text-6xl md:text-8xl font-black mb-6 gradient-text" style="font-family: 'Playfair Display', serif; line-height: 1.1;">
+                    Connect with
+                    <br>Your Favorite
+                    <br>Creators
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    Discover exclusive content from talented creators around the world. 
+                    Support their artistry and build meaningful connections.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button class="subscribe-btn px-8 py-4 rounded-full text-lg font-semibold text-white">
+                        Explore Creators
+                    </button>
+                    <button class="glass-card px-8 py-4 rounded-full text-lg font-semibold text-white hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        Start Creating
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 reveal">
+                <div class="text-center">
+                    <div class="stats-counter text-3xl md:text-4xl gradient-text mb-2">50K+</div>
+                    <div class="text-gray-400">Active Creators</div>
+                </div>
+                <div class="text-center">
+                    <div class="stats-counter text-3xl md:text-4xl gradient-text mb-2">2M+</div>
+                    <div class="text-gray-400">Subscribers</div>
+                </div>
+                <div class="text-center">
+                    <div class="stats-counter text-3xl md:text-4xl gradient-text mb-2">$10M+</div>
+                    <div class="text-gray-400">Creator Earnings</div>
+                </div>
+                <div class="text-center">
+                    <div class="stats-counter text-3xl md:text-4xl gradient-text mb-2">95%</div>
+                    <div class="text-gray-400">Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Creators -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" style="font-family: 'Playfair Display', serif;">
+                    Featured <span class="gradient-text">Creators</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Discover talented creators sharing their passion and artistry with the world
+                </p>
+            </div>
+            
+            <!-- Category Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 reveal">
+                <button class="category-btn active px-6 py-3 rounded-full text-sm font-medium" data-category="all">All</button>
+                <button class="category-btn px-6 py-3 rounded-full text-sm font-medium" data-category="art">Art & Design</button>
+                <button class="category-btn px-6 py-3 rounded-full text-sm font-medium" data-category="fitness">Fitness</button>
+                <button class="category-btn px-6 py-3 rounded-full text-sm font-medium" data-category="music">Music</button>
+                <button class="category-btn px-6 py-3 rounded-full text-sm font-medium" data-category="lifestyle">Lifestyle</button>
+                <button class="category-btn px-6 py-3 rounded-full text-sm font-medium" data-category="education">Education</button>
+            </div>
+            
+            <!-- Creators Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 reveal" id="creators-grid">
+                <!-- Creator Card 1 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="art">
+                    <div class="relative">
+                        <img src="resources/creator-1.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-green-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                Available Now
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Sophia Chen</h3>
+                        <p class="text-gray-400 text-sm mb-4">Digital Artist & Designer</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">2.1K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">156</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$9.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 2 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="fitness">
+                    <div class="relative">
+                        <img src="resources/creator-2.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-gray-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                2 hours ago
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Marcus Johnson</h3>
+                        <p class="text-gray-400 text-sm mb-4">Fitness Coach</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">3.7K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">89</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$14.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 3 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="music">
+                    <div class="relative">
+                        <img src="resources/content-preview.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-green-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                Live Now
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Luna Rodriguez</h3>
+                        <p class="text-gray-400 text-sm mb-4">Musician & Producer</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">5.2K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">234</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$12.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 4 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="lifestyle">
+                    <div class="relative">
+                        <img src="resources/creator-1.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-yellow-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                New Content
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Aria Thompson</h3>
+                        <p class="text-gray-400 text-sm mb-4">Lifestyle Influencer</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">8.1K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">412</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$19.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 5 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="education">
+                    <div class="relative">
+                        <img src="resources/creator-2.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-gray-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                1 day ago
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">David Kim</h3>
+                        <p class="text-gray-400 text-sm mb-4">Photography Teacher</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">1.8K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">67</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$7.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 6 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="art">
+                    <div class="relative">
+                        <img src="resources/content-preview.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-green-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                Available Now
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Maya Patel</h3>
+                        <p class="text-gray-400 text-sm mb-4">Fashion Designer</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">4.3K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">178</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$16.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 7 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="music">
+                    <div class="relative">
+                        <img src="resources/creator-1.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-yellow-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                New Album
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Alex Rivera</h3>
+                        <p class="text-gray-400 text-sm mb-4">Singer & Songwriter</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">6.7K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">289</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$11.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Creator Card 8 -->
+                <div class="creator-card glass-card rounded-2xl overflow-hidden" data-category="fitness">
+                    <div class="relative">
+                        <img src="resources/creator-2.jpg" alt="Creator" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-green-500 w-3 h-3 rounded-full"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="glass-card px-3 py-2 rounded-full text-xs font-medium">
+                                Workout Live
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Zara Williams</h3>
+                        <p class="text-gray-400 text-sm mb-4">Yoga Instructor</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">3.2K</span> subscribers
+                            </div>
+                            <div class="text-sm text-gray-300">
+                                <span class="font-semibold">145</span> posts
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-lg font-bold gradient-text">$13.99/month</div>
+                            <button class="subscribe-btn px-4 py-2 rounded-full text-sm font-medium">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="text-center mt-12 reveal">
+                <button class="glass-card px-8 py-4 rounded-full text-lg font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                    Load More Creators
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Features -->
+    <section class="py-20 bg-gradient-to-r from-gray-900 to-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" style="font-family: 'Playfair Display', serif;">
+                    Why Choose <span class="gradient-text">CreatorHub</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    The premier platform for creators and subscribers to connect, create, and thrive together
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Direct Support</h3>
+                    <p class="text-gray-400">
+                        Support your favorite creators directly with subscriptions, tips, and premium content purchases
+                    </p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Exclusive Content</h3>
+                    <p class="text-gray-400">
+                        Access unique content you won't find anywhere else, from behind-the-scenes to premium tutorials
+                    </p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Direct Messaging</h3>
+                    <p class="text-gray-400">
+                        Connect personally with creators through our secure messaging platform
+                    </p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Analytics Dashboard</h3>
+                    <p class="text-gray-400">
+                        Creators get detailed insights into their performance and earnings
+                    </p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Secure Platform</h3>
+                    <p class="text-gray-400">
+                        Your privacy and security are our top priority with end-to-end encryption
+                    </p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center reveal">
+                    <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Community</h3>
+                    <p class="text-gray-400">
+                        Join a vibrant community of creators and supporters who share your interests
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" style="font-family: 'Playfair Display', serif;">
+                    Ready to <span class="gradient-text">Get Started</span>?
+                </h2>
+                <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Join thousands of creators and subscribers building meaningful connections through exclusive content
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button class="subscribe-btn px-8 py-4 rounded-full text-lg font-semibold text-white">
+                        Explore Creators
+                    </button>
+                    <button class="glass-card px-8 py-4 rounded-full text-lg font-semibold text-white hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        Become a Creator
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-50 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold gradient-text mb-4" style="font-family: 'Playfair Display', serif;">CreatorHub</h3>
+                <p class="text-gray-400 mb-8">Empowering creators, connecting communities</p>
+                <div class="flex justify-center space-x-8 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">About</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Support</a>
+                </div>
+                <p class="text-gray-500 text-sm">© 2024 CreatorHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

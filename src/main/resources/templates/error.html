@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: header}"></div>
+  <main class="panel">
+    <h1>Error</h1>
+    <p>Ha ocurrido un error. Intenta nuevamente o contacta al administrador.</p>
+    <a th:href="@{/}" class="btn">Volver</a>
+  </main>
+
+  <footer>© 2025 Colseguros</footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
